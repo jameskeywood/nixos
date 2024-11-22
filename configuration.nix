@@ -86,6 +86,26 @@
   # Enable use of light
   programs.light.enable = true;
 
+  # Enable bluetooth support
+  hardware.bluetooth.enable = true; # enables support for Bluetooth
+  hardware.bluetooth.powerOnBoot = true; # powers up the default Bluetooth controller on boot
+  services.blueman.enable = true; # enable the blueman applet and manager
+
+  # Use firmware
+  hardware.enableAllFirmware = true;
+
+  # Enable the OpenSSH daemon.
+  services.openssh.enable = true;
+
+  # Enable power management
+  #powerManagement.powertop.enable = true;
+
+  # Allow unfree packages
+  nixpkgs.config.allowUnfree = true;
+
+  # Enable experimental features
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.james = {
     isNormalUser = true;
@@ -98,6 +118,7 @@
       cmus
       stremio
       parsec-bin
+      texliveFull
     ];
   };
 
@@ -106,16 +127,7 @@
   users.users.nixosvmtest.initialPassword = "test";
   users.users.nixosvmtest.group = "nixosvmtest";
   users.groups.nixosvmtest = {};
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
-  # Enable experimental features
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-
-  # Use firmware
-  hardware.enableAllFirmware = true;
-
+  
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -123,6 +135,7 @@
     wget
     dmenu
     unzip
+    xcolor
 
     # Include and patch st
     (st.overrideAttrs (oldAttrs: rec {
@@ -135,26 +148,7 @@
       ];
     }))
   ];
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
+  
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave

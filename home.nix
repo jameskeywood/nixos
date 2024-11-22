@@ -79,8 +79,8 @@ in
     # Git config
     programs.git = {
       enable = true;
-      userName = "jameskeywood";
-      userEmail = "jskeywood@gmail.com";
+      userName = "p38360jk";
+      userEmail = "james.keywood@student.manchester.ac.uk";
     };
 
     # Vim config
