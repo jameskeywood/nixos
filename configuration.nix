@@ -13,14 +13,10 @@
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.configurationLimit = 10;
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "hp"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Enable networking
   networking.networkmanager.enable = true;
@@ -86,6 +82,15 @@
   # Enable use of light
   programs.light.enable = true;
 
+  # Bind volume and brightness keys
+  services.actkbd = {
+    enable = true;
+    bindings = [
+      { keys = [ 224 ]; events = [ "key" ]; command = "/run/current-system/sw/bin/light -U 10"; }
+      { keys = [ 225 ]; events = [ "key" ]; command = "/run/current-system/sw/bin/light -A 10"; }
+    ];
+  };
+
   # Enable bluetooth support
   hardware.bluetooth.enable = true; # enables support for Bluetooth
   hardware.bluetooth.powerOnBoot = true; # powers up the default Bluetooth controller on boot
@@ -97,20 +102,20 @@
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
-  # Enable power management
-  #powerManagement.powertop.enable = true;
-
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
   # Enable experimental features
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+  # Install docker
+  virtualisation.docker.enable = true;
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.james = {
     isNormalUser = true;
     description = "James Keywood";
-    extraGroups = [ "networkmanager" "wheel" "video" "audio" ];
+    extraGroups = [ "networkmanager" "wheel" "video" "audio" "docker" ];
     packages = with pkgs; [
       firefox
       git
@@ -119,6 +124,7 @@
       stremio
       parsec-bin
       texliveFull
+      thunderbird
     ];
   };
 
@@ -131,7 +137,6 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
     dmenu
     unzip

@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 let
-  home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/release-24.05.tar.gz";
+  home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/release-24.11.tar.gz";
 in
 {
   imports = [
@@ -41,6 +41,20 @@ in
       # (pkgs.writeShellScriptBin "my-hello" ''
       #   echo "Hello, ${config.home.username}!"
       # '')
+
+      (pkgs.writeShellScriptBin "status" ''
+        while true
+        do
+          CON=''$(nmcli | grep -o "[^ ]*''$" -m 1)
+          STR=''$(cat /proc/net/wireless | grep wlp3s0 | awk '{print int(''$3)}')
+          BLU=''$(bluetoothctl devices Connected | cut -d' ' -f3-)
+          BRI=''$(light)
+          VOL=''$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | grep -o [0-9].[0-9][0-9])
+          BAT=''$(cat /sys/class/power_supply/BAT0/capacity)
+          xsetroot -name " ''$(date) | CON:''${CON} ''${STR} | BLU:''${BLU[0]} | BRI:''${BRI} | VOL:''${VOL} | BAT:''${BAT}% "
+          sleep 1
+        done
+      '')
     ];
 
     # Home Manager is pretty good at managing dotfiles. The primary way to manage
@@ -92,9 +106,14 @@ in
         set tabstop=4
         set shiftwidth=4
         syntax on
-        set ruler
         set smarttab
       '';
+    };
+
+    # Zathura config
+    programs.zathura = {
+      enable = true;
+      options = { default-bg = "#EEE8D5"; };
     };
 
   };
