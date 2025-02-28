@@ -42,6 +42,7 @@ in
       #   echo "Hello, ${config.home.username}!"
       # '')
 
+      # script for dwm status bar
       (pkgs.writeShellScriptBin "status" ''
         while true
         do
@@ -54,6 +55,23 @@ in
           xsetroot -name " ''$(date) | CON:''${CON} ''${STR} | BLU:''${BLU[0]} | BRI:''${BRI} | VOL:''${VOL} | BAT:''${BAT}% "
           sleep 1
         done
+      '')
+
+      # script for converting files into pdfs
+      (pkgs.writeShellScriptBin "conpdf" ''
+        if [ "''$#" -ne 1 ]; then
+          echo "Usage: conpdf <file_to_convert>"
+          exit 1
+        fi
+
+        FILE="''$1"
+        
+        if [ ! -f "''$FILE" ]; then
+          echo "Error: File '$FILE' not found."
+          exit 1
+        fi
+
+        soffice --headless --convert-to pdf --outdir . "''$FILE"
       '')
     ];
 

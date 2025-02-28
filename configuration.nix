@@ -118,13 +118,11 @@
     extraGroups = [ "networkmanager" "wheel" "video" "audio" "docker" ];
     packages = with pkgs; [
       firefox
-      git
-      spotify
       cmus
       stremio
-      parsec-bin
       texliveFull
       thunderbird
+      libreoffice
     ];
   };
 
@@ -141,6 +139,7 @@
     dmenu
     unzip
     xcolor
+    scrot
 
     # Include and patch st
     (st.overrideAttrs (oldAttrs: rec {
