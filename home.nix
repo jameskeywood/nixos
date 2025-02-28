@@ -73,6 +73,11 @@ in
 
         soffice --headless --convert-to pdf --outdir . "''$FILE"
       '')
+
+      # script for playing brown noise
+      (pkgs.writeShellScriptBin "noise" ''
+        sox -n -d synth -1 brownnoise vol 0.02
+      '')
     ];
 
     # Home Manager is pretty good at managing dotfiles. The primary way to manage

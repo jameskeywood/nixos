@@ -123,6 +123,7 @@
       texliveFull
       thunderbird
       libreoffice
+      sox
     ];
   };
 
